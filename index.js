@@ -16,11 +16,17 @@ app.get('/render', async (req, res) => {
   const baseURL = new URL(url).origin;
 
   // Modify the URLs of all resources fetched by Puppeteer to include the base URL
-  await page.$$eval('link[rel="stylesheet"], img, script[src]', (elements, baseURL) => {
+  await page.$$eval('link[rel="stylesheet"], img, script[src], a[href]', (elements, baseURL) => {
     elements.forEach((element) => {
-      const url = new URL(element.src || element.href, baseURL).href;
-      element.src = url;
-      element.href = url;
+      let url = element.src || element.href;
+      if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+        url = new URL(url, baseURL).href;
+        if (element.src) {
+          element.src = url;
+        } else {
+          element.href = url;
+        }
+      }
     });
   }, baseURL);
 
