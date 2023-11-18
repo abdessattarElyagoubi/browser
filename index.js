@@ -86,13 +86,10 @@ app.get('/screen', async (req, res) => {
   await page.goto('https://m.fusionbrain.ai').catch((err) => {
   console.log('Failed to load webpage:', err);
 });
-  await page.waitForNavigation().catch((err) => {
-  console.log('Failed to load webpage:', err);
+  await page.waitForNavigation();
 
-  await page.type('#username', 'droiders@outlook.com').catch((err) => {
-  console.log('Failed to load webpage:', err);
-  await page.type('#password', 'Simou2007').catch((err) => {
-  console.log('Failed to load webpage:', err);
+  await page.type('#username', 'droiders@outlook.com');
+  await page.type('#password', 'Simou2007');
   await page.click('#kc-login');
   await page.waitForNavigation();
 
