@@ -6,7 +6,7 @@ const app = express();
 
 
 // Generate screenshot
-app.get('/screenshot/:url', async (req, res) => {
+// Generate screenshot
 app.get('/screenshot/:url', async (req, res) => {
   const { url } = req.params;
   const browser = await puppeteer.launch();
@@ -14,13 +14,12 @@ app.get('/screenshot/:url', async (req, res) => {
   await page.goto(url).catch((err) => {
     console.log('Failed to load webpage:', err);
   });
-  const screenshot = await page.screenshot({ type:"png", fullpage:true });
+  const screenshot = await page.screenshot({ type: "png", fullpage: true });
   await browser.close();
   res.set('Content-Type', 'image/png');
   res.send(screenshot);
 });
 
-// Generate PDF
 app.get('/pdf/:url', async (req, res) => {
   const { url } = req.params;
   const browser = await puppeteer.launch();
