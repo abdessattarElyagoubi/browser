@@ -7,11 +7,13 @@ const app = express();
 
 // Generate screenshot
 app.get('/screenshot/:url', async (req, res) => {
+app.get('/screenshot/:url', async (req, res) => {
   const { url } = req.params;
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(url).catch((err) => {
-  console.log('Failed to load webpage:', err);
+    console.log('Failed to load webpage:', err);
+  });
   const screenshot = await page.screenshot({ type:"png", fullpage:true });
   await browser.close();
   res.set('Content-Type', 'image/png');
