@@ -12,7 +12,7 @@ app.get('/screenshot/:url', async (req, res) => {
   const page = await browser.newPage();
   await page.goto(url).catch((err) => {
   console.log('Failed to load webpage:', err);
-  const screenshot = await page.screenshot({ "quality": 100, "type":"png", "fullpage":true});
+  const screenshot = await page.screenshot({ quality: 100, type:"png", fullpage:true});
   await browser.close();
   res.set('Content-Type', 'image/png');
   res.send(screenshot);
@@ -25,7 +25,7 @@ app.get('/pdf/:url', async (req, res) => {
   const page = await browser.newPage();
   await page.goto(url).catch((err) => {
   console.log('Failed to load webpage:', err);
-  const pdf = await page.pdf({ format: 'A4', "fullpage":true });
+  const pdf = await page.pdf({ format: 'A4', fullpage:true });
   await browser.close();
   res.set('Content-Type', 'application/pdf');
   res.send(pdf);
@@ -79,7 +79,7 @@ app.get('/test', async (req, res) => {
   await page.goto(url).catch((err) => {
   console.log('Failed to load webpage:', err);
 });
-  const screenshot = await page.screenshot({ "quality": 100, "type":"png", "fullpage":true});
+  const screenshot = await page.screenshot({ quality: 100, type:"png", fullpage:true});
   await browser.close()
   res.set('Content-Type', 'image/png');
   res.send(screenshot);
