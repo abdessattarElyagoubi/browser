@@ -65,7 +65,18 @@ app.get('/render', async (req, res) => {
   await browser.close();
   res.send(html);
 });
+app.get('/test', async (req, res) => {
+  const { url } = req.query;
 
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  await page.goto(url);
+  const screenshot = await page.screenshot({ type: 'png' });
+  await browser.close()
+  res.set('Content-Type', 'image/png');
+  res.send(screenshot);
+});
 app.listen(process.env.PORT || 3000, () => {
   console.log('Server started');
 });
