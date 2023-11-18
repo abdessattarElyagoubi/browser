@@ -10,8 +10,9 @@ app.get('/screenshot/:url', async (req, res) => {
   const { url } = req.params;
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto(url);
-  const screenshot = await page.screenshot();
+  await page.goto(url).catch((err) => {
+  console.log('Failed to load webpage:', err);
+  const screenshot = await page.screenshot({ "quality": 100, "type":"png", "fullpage":true});
   await browser.close();
   res.set('Content-Type', 'image/png');
   res.send(screenshot);
@@ -22,8 +23,9 @@ app.get('/pdf/:url', async (req, res) => {
   const { url } = req.params;
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto(url);
-  const pdf = await page.pdf({ format: 'A4' });
+  await page.goto(url).catch((err) => {
+  console.log('Failed to load webpage:', err);
+  const pdf = await page.pdf({ format: 'A4', "fullpage":true });
   await browser.close();
   res.set('Content-Type', 'application/pdf');
   res.send(pdf);
@@ -33,7 +35,8 @@ app.get('/perform/:url', async (req, res) => {
   const { url } = req.params;
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto(url);
+  await page.goto(url).catch((err) => {
+  console.log('Failed to load webpage:', err);
   const performanceTiming = JSON.parse(
     await page.evaluate(() => JSON.stringify(window.performance.timing))
   );
@@ -46,7 +49,8 @@ app.get('/debug/:url', async (req, res) => {
   const { url } = req.params;
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  await page.goto(url);
+  await page.goto(url).catch((err) => {
+  console.log('Failed to load webpage:', err);
   // Pause execution and wait for user input
   await page.evaluate(() => { debugger; });
   await browser.close();
@@ -57,7 +61,8 @@ app.get('/render', async (req, res) => {
   const url = req.query.url;
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: 'networkidle0' });
+  await page.goto(url, { waitUntil: 'networkidle0' }).catch((err) => {
+  console.log('Failed to load webpage:', err);
 
   // Get the HTML content of the page
   let html = await page.content();
@@ -74,7 +79,7 @@ app.get('/test', async (req, res) => {
   await page.goto(url).catch((err) => {
   console.log('Failed to load webpage:', err);
 });
-  const screenshot = await page.screenshot({ type: 'png' });
+  const screenshot = await page.screenshot({ "quality": 100, "type":"png", "fullpage":true});
   await browser.close()
   res.set('Content-Type', 'image/png');
   res.send(screenshot);
@@ -83,7 +88,7 @@ app.get('/screen', async (req, res) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  await page.goto('https://m.fusionbrain.ai').catch((err) => {
+  await page.goto('https://m.fusionbrain.ai', { waitUntil: 'networkidle0' }).catch((err) => {
   console.log('Failed to load webpage:', err);
 });
   await page.waitForNavigation();
