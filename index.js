@@ -27,6 +27,7 @@ app.get('/pdf/:url', async (req, res) => {
   const page = await browser.newPage();
   await page.goto(url).catch((err) => {
   console.log('Failed to load webpage:', err);
+  });
   const pdf = await page.pdf({ format: 'A4', fullpage:true });
   await browser.close();
   res.set('Content-Type', 'application/pdf');
@@ -39,6 +40,7 @@ app.get('/perform/:url', async (req, res) => {
   const page = await browser.newPage();
   await page.goto(url).catch((err) => {
   console.log('Failed to load webpage:', err);
+    });
   const performanceTiming = JSON.parse(
     await page.evaluate(() => JSON.stringify(window.performance.timing))
   );
@@ -53,6 +55,7 @@ app.get('/debug/:url', async (req, res) => {
   const page = await browser.newPage();
   await page.goto(url).catch((err) => {
   console.log('Failed to load webpage:', err);
+});
   // Pause execution and wait for user input
   await page.evaluate(() => { debugger; });
   await browser.close();
@@ -65,7 +68,7 @@ app.get('/render', async (req, res) => {
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: 'networkidle0' }).catch((err) => {
   console.log('Failed to load webpage:', err);
-
+        });
   // Get the HTML content of the page
   let html = await page.content();
 
