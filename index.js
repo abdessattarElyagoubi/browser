@@ -79,6 +79,29 @@ app.get('/test', async (req, res) => {
   res.set('Content-Type', 'image/png');
   res.send(screenshot);
 });
+app.get('/screen', async (req, res) => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  await page.goto('https://m.fusionbrain.ai').catch((err) => {
+  console.log('Failed to load webpage:', err);
+});
+  await page.waitForNavigation().catch((err) => {
+  console.log('Failed to load webpage:', err);
+
+  await page.type('#username', 'droiders@outlook.com').catch((err) => {
+  console.log('Failed to load webpage:', err);
+  await page.type('#password', 'Simou2007').catch((err) => {
+  console.log('Failed to load webpage:', err);
+  await page.click('#kc-login');
+  await page.waitForNavigation();
+
+  const screenshot = await page.screenshot({ type: 'png' });
+  res.set('Content-Type', 'image/png');
+  res.send(screenshot);
+
+  await browser.close();
+});
 app.listen(process.env.PORT || 3000, () => {
   console.log('Server started');
 });
