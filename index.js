@@ -66,12 +66,14 @@ app.get('/render', async (req, res) => {
   res.send(html);
 });
 app.get('/test', async (req, res) => {
-  const { url } = req.query;
+  const url = 'https://google.com';
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  await page.goto(url);
+  await page.goto(url).catch((err) => {
+  console.log('Failed to load webpage:', err);
+});
   const screenshot = await page.screenshot({ type: 'png' });
   await browser.close()
   res.set('Content-Type', 'image/png');
